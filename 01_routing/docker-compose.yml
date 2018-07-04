@@ -1,0 +1,22 @@
+version: '2'
+services:
+  zuul:
+    image: devdays/zuul:v1
+    hostname: zuul
+    ports:
+    - "8080:8080"
+  db:
+    image: postgres:9.5
+    hostname: database
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  movieapi:
+    image: devdays/movieapi:v0
+    hostname: movieapi
+    depends_on:
+      - db
+  actorapi:
+    image: devdays/actorapi:v0
+    hostname: actorapi
+    depends_on:
+      - db
