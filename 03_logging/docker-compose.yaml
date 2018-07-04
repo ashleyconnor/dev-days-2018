@@ -1,0 +1,33 @@
+version: '2'
+services:
+  db:
+    image: postgres:9.5
+    hostname: database
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  movieapi:
+    image: devdays/movieapi:v3
+    hostname: movieapi
+    ports:
+    - "9095:9095"
+    depends_on:
+      - db
+      - zipkin
+  actorapi:
+    image: devdays/actorapi:v1
+    hostname: actorapi
+    depends_on:
+      - db
+  logspout:
+    image: gliderlabs/logspout
+    hostname: logspout
+    command: syslog://logs4.papertrailapp.com:33849
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  zipkin:
+    image: openzipkin/zipkin
+    hostname: zipkin
+    ports:
+      - "9411:9411"
+    environment:
+      SERVER_PORT: "9411"

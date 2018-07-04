@@ -1,0 +1,3 @@
+CREATE DATABASE movies;
+CREATE DATABASE actors;
+CREATE DATABASE reviews;
