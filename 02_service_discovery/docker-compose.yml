@@ -1,0 +1,23 @@
+version: '2'
+services:
+  eureka:
+    image: devdays/eureka:v1
+    hostname: eureka
+    ports:
+    - "5678:5678"
+  db:
+    image: postgres:9.5
+    hostname: database
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  movieapi:
+    image: devdays/movieapi:v1
+    hostname: movieapi
+    depends_on:
+      - eureka
+      - db
+  actorapi:
+    image: devdays/actorapi:v0
+    hostname: actorapi
+    depends_on:
+      - db
